@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bus visualiser Norway</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100vh;
+        width: 100vw;
+      }
+      #search-form {
+        position: absolute;
+        top: 10px;
+        left: 48px;
+        z-index: 1000;
+      }
+      #search {
+        padding: 4px;
+        border-radius: 4px;
+        height: 32px;
+      }
+      #search-button {
+        padding-left: 8px;
+        padding-right: 8px;
+        border-radius: 4px;
+        height: 44px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <form id="search-form">
+      <input
+        type="text"
+        name="search"
+        id="search"
+        placeholder="LineRef. Ex: SKY:Line:445"
+        value="SKY:Line:445"
+      />
+      <button type="submit">Search</button>
+    </form>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="markerRotation.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
