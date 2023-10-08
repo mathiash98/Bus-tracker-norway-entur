@@ -1,6 +1,8 @@
-# bus-tracker-norway
+# Entur Bus-tracker-norway
 
 [Live website](https://mathiash98.github.io/Bus-tracker-norway-entur/?lineRef=SKY%3ALine%3A4)
+
+Entur's website for tracking buses (which has more features and much better UX): https://vehicle-map.entur.org/
 
 ![Screenshot of live website](./bus-tracker-entur.jpg)
 
