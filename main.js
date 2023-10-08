@@ -2,6 +2,13 @@ const map = L.map("map");
 const searchInput = document.getElementById("search");
 const searchForm = document.getElementById("search-form");
 
+// Automatically set searchInput value from queryParam lineRef
+const urlParams = new URLSearchParams(window.location.search);
+const lineRef = urlParams.get("lineRef");
+if (lineRef) {
+  searchInput.value = lineRef;
+}
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
@@ -24,14 +31,11 @@ const BusIcon = new BusIconBase({
 });
 
 map.on("click", (e) => {
-  console.info(e);
+  console.debug("Clicked", e.latlng);
 });
 
 map.on("load", async () => {
-  console.info("Map loaded");
-  const searchInputValue = searchInput.value;
-  await renderBusses(searchInputValue);
-
+  await renderBusses(searchInput.value);
   map.addLayer(markers);
 });
 
@@ -39,15 +43,30 @@ map.setView([60.37, 5.294], 11);
 
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  console.debug("Search button clicked", searchInput.value);
   renderBusses(searchInput.value);
+
+  // set queryParam for lineRef
+  updateQueryParamForLineRef(searchInput.value);
 });
+
+/**
+ * @param {string} lineRef
+ */
+function updateQueryParamForLineRef(lineRef) {
+  const url = new URL(window.location);
+  if (lineRef) {
+    url.searchParams.set("lineRef", lineRef);
+  } else {
+    url.searchParams.delete("lineRef");
+  }
+  window.history.pushState({}, "", url);
+}
 
 /**
  * Check out entur API for more info
  * https://api.entur.io/graphql-explorer/vehicles?query=%7B%0A%20%20vehicles%28codespaceId%3A%20%22SKY%22%29%20%7B%0A%20%20%20%20line%20%7B%0A%20%20%20%20%20%20lineRef%0A%20%20%20%20%20%20lineName%0A%20%20%20%20%20%20publicCode%0A%20%20%20%20%7D%0A%20%20%20%20lastUpdated%0A%20%20%20%20location%20%7B%0A%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20longitude%0A%20%20%20%20%7D%0A%20%20%20%20codespace%20%7B%0A%20%20%20%20%20%20codespaceId%0A%20%20%20%20%7D%0A%20%20%20%20delay%0A%20%20%20%20originName%0A%20%20%20%20vehicleId%0A%20%20%20%20destinationName%0A%20%20%20%20bearing%0A%20%20%7D%0A%7D%0A
  */
-async function renderBusses(lineRef = "SKY:Line:445") {
+async function renderBusses(lineRef) {
   const jsonData = await fetchBusData(lineRef);
   const busses = jsonData.data.vehicles;
 
